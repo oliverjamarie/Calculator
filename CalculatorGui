@@ -1,0 +1,116 @@
+package gui;
+
+import java.util.ArrayList;
+
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.stage.Stage;
+
+public class CalculatorGUI extends Application {
+
+	private TextArea displayArea;
+	private ArrayList<Button> buttonList;
+
+	@Override
+	public void start(Stage primaryStage) {
+		int sceneWidth = 260, sceneHeight = 550;
+
+		int verSpaceBetweenNodes = 8, horSpaceBetweenNodes = 8;
+		int paneBorderTop = 20, paneBorderRight = 20;
+		int paneBorderBottom = 20, paneBorderLeft = 20;
+
+		Button zero = new Button("0");
+		Button one = new Button("1");
+		Button two = new Button("2");
+		Button three = new Button("3");
+		Button four = new Button("4");
+		Button five = new Button("5");
+		Button six = new Button("6");
+		Button seven = new Button("7");
+		Button eight = new Button("8");
+		Button nine = new Button("9");
+		Button dot = new Button(".");
+		Button clear = new Button("C");
+		Button divide = new Button("/");
+		Button plus = new Button("+");
+		Button multiply = new Button("*");
+		Button minus = new Button("-");
+		Button equal = new Button("=");
+
+		Button clearExpression = new Button("CE");
+		Button sqrt = new Button("√");
+		Button inverse = new Button("1/x");
+
+		buttonList = new ArrayList<Button>();
+
+		buttonList.add(clearExpression);
+		buttonList.add(inverse);
+		buttonList.add(sqrt);
+		buttonList.add(divide);
+		buttonList.add(seven);
+		buttonList.add(eight);
+		buttonList.add(nine);
+		buttonList.add(plus);
+		buttonList.add(four);
+		buttonList.add(five);
+		buttonList.add(six);
+		buttonList.add(multiply);
+		buttonList.add(one);
+		buttonList.add(two);
+		buttonList.add(three);
+		buttonList.add(minus);
+		buttonList.add(zero);
+		buttonList.add(dot);
+		buttonList.add(clear);
+		buttonList.add(equal);
+
+		for (Button b : buttonList) {
+			b.setStyle("-fx-font: 18 arial; -fx-base: #616161; "
+					+ "-fx-text-fill: #B2EBF2;");
+			b.setPrefSize(50, 50);
+		}
+
+		FlowPane numbersPane = new FlowPane();
+		numbersPane.setHgap(horSpaceBetweenNodes);
+		numbersPane.setVgap(verSpaceBetweenNodes);
+		numbersPane.setPadding(new Insets(paneBorderTop, paneBorderRight,
+				paneBorderBottom, paneBorderLeft));
+		for (Button button : buttonList) {
+			numbersPane.getChildren().add(button);
+		}
+
+		BorderPane back = new BorderPane();
+		back.setStyle(("-fx-background-color: #424242;"));
+		displayArea = new TextArea();
+		displayArea.setEditable(false);
+		displayArea.setWrapText(true);
+
+		displayArea.setStyle(
+				"-fx-control-inner-background:#424242; -fx-font: 18 arial;"
+						+ " -fx-text-fill: #ECEFF1; ");
+
+		/* Adding scroll pane to display area */
+		ScrollPane scrollPane = new ScrollPane(displayArea);
+
+		scrollPane.setStyle("-fx-background-color: #424242;");
+		back.setTop(scrollPane);
+		back.setCenter(numbersPane);
+
+		Scene scene = new Scene(back, sceneWidth, sceneHeight);
+		primaryStage.setTitle("Calculator");
+		primaryStage.setScene(scene);
+		primaryStage.show();
+		primaryStage.setResizable(false);
+
+	}
+
+	public static void main(String[] args) {
+		Application.launch(args);
+	}
+}
