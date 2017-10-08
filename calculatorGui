@@ -1,8 +1,8 @@
-package gui;
-
 import java.util.ArrayList;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.*;
 import javafx.scene.control.Button;
@@ -12,64 +12,32 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 
+enum OperationType {
+	ADDITION,
+	SUBTRACTION,
+	MULTIPLICATION,
+	DIVISION,
+	NONE
+}
+
 public class CalculatorGUI extends Application {
 
 	private TextArea displayArea;
 	private ArrayList<Button> buttonList;
+	private OperationType currentOp;
+	private double firstNumber;
+	private double secondNumber;
 
 	@Override
 	public void start(Stage primaryStage) {
-		int sceneWidth = 260, sceneHeight = 500;
+		int sceneWidth = 265, sceneHeight = 500; // Changed from sceneWidth = 260
 
 		int verSpaceBetweenNodes = 8, horSpaceBetweenNodes = 8;
 		int paneBorderTop = 20, paneBorderRight = 20;
 		int paneBorderBottom = 20, paneBorderLeft = 20;
 
-		Button zero = new Button("0");
-		Button one = new Button("1");
-		Button two = new Button("2");
-		Button three = new Button("3");
-		Button four = new Button("4");
-		Button five = new Button("5");
-		Button six = new Button("6");
-		Button seven = new Button("7");
-		Button eight = new Button("8");
-		Button nine = new Button("9");
-		Button dot = new Button(".");
-		Button clear = new Button("C");
-		Button divide = new Button("/");
-		Button plus = new Button("+");
-		Button multiply = new Button("*");
-		Button minus = new Button("-");
-		Button equal = new Button("=");
-
-		Button clearExpression = new Button("CE");
-		Button sqrt = new Button("√");
-		Button inverse = new Button("1/x");
-
-		buttonList = new ArrayList<Button>();
-
-		buttonList.add(clearExpression);
-		buttonList.add(inverse);
-		buttonList.add(sqrt);
-		buttonList.add(divide);
-		buttonList.add(seven);
-		buttonList.add(eight);
-		buttonList.add(nine);
-		buttonList.add(plus);
-		buttonList.add(four);
-		buttonList.add(five);
-		buttonList.add(six);
-		buttonList.add(multiply);
-		buttonList.add(one);
-		buttonList.add(two);
-		buttonList.add(three);
-		buttonList.add(minus);
-		buttonList.add(zero);
-		buttonList.add(dot);
-		buttonList.add(clear);
-		buttonList.add(equal);
-
+		initializeButtons();
+		
 		for (Button b : buttonList) {
 			b.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
 			b.setPrefSize(50, 50);
@@ -102,6 +70,265 @@ public class CalculatorGUI extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		primaryStage.setResizable(false);
+		
+		currentOp = OperationType.NONE;
+		firstNumber = 0;
+		secondNumber = 0;
+	}
+	
+	public double calculate() {
+		secondNumber = parseDisplay();
+		
+		switch(currentOp) {
+		case ADDITION:
+			return firstNumber + secondNumber;
+		case SUBTRACTION:
+			return firstNumber - secondNumber;
+		case MULTIPLICATION:
+			return firstNumber * secondNumber;
+		case DIVISION:
+			return firstNumber / secondNumber;
+		default: 
+			return 0;
+		}
+	}
+	
+	public void addOperation(OperationType o) {
+		currentOp = o;
+		firstNumber = parseDisplay();
+		displayArea.setText("");
+	}
+	
+	public void clear() {
+		displayArea.setText("");
+		firstNumber = 0;
+		secondNumber = 0;
+		currentOp = OperationType.NONE;
+	}
+	
+	public void clearExpression() {
+		displayArea.setText("");
+	}
+	
+	public double inverse(double d) {
+		return 1 / d;
+	}
+	
+	public double sqrt(double d) {
+		return Math.sqrt(d);
+	}
+	
+	public double parseDisplay() {
+		return Double.parseDouble(displayArea.getText());
+	}
+	
+	public void initializeButtons() {
+		Button zero = new Button("0");
+		Button one = new Button("1");
+		Button two = new Button("2");
+		Button three = new Button("3");
+		Button four = new Button("4");
+		Button five = new Button("5");
+		Button six = new Button("6");
+		Button seven = new Button("7");
+		Button eight = new Button("8");
+		Button nine = new Button("9");
+		Button dot = new Button(".");
+		Button clear = new Button("C");
+		Button divide = new Button("/");
+		Button plus = new Button("+");
+		Button multiply = new Button("*");
+		Button minus = new Button("-");
+		Button equal = new Button("=");
+
+		Button clearExpression = new Button("CE");
+		Button sqrt = new Button("√");
+		Button inverse = new Button("1/x");
+		
+		zero.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    		displayArea.setText(displayArea.getText() + "0");
+		        event.consume();
+		    }
+		});
+		
+		one.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    		displayArea.setText(displayArea.getText() + "1");
+		        event.consume();
+		    }
+		});
+		
+		two.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    		displayArea.setText(displayArea.getText() + "2");
+		        event.consume();
+		    }
+		});
+		
+		three.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    		displayArea.setText(displayArea.getText() + "3");
+		        event.consume();
+		    }
+		});
+		
+		four.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    		displayArea.setText(displayArea.getText() + "4");
+		        event.consume();
+		    }
+		});
+		
+		five.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    		displayArea.setText(displayArea.getText() + "5");
+		        event.consume();
+		    }
+		});
+		
+		six.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    		displayArea.setText(displayArea.getText() + "6");
+		        event.consume();
+		    }
+		});
+		
+		seven.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    		displayArea.setText(displayArea.getText() + "7");
+		        event.consume();
+		    }
+		});
+		
+		eight.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    		displayArea.setText(displayArea.getText() + "8");
+		        event.consume();
+		    }
+		});
+		
+		nine.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    		displayArea.setText(displayArea.getText() + "9");
+		        event.consume();
+		    }
+		});
+		
+		dot.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    		if (!displayArea.getText().contains(".")) {
+		    			displayArea.setText(displayArea.getText() + ".");
+		    		}
+		        event.consume();
+		    }
+		});
+		
+		clear.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    		clear();
+		        event.consume();
+		    }
+		});
+		
+		clearExpression.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    		clearExpression();
+		        event.consume();
+		    }
+		});
+		
+		plus.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    		addOperation(OperationType.ADDITION);
+		        event.consume();
+		    }
+		});
+		
+		minus.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    		addOperation(OperationType.SUBTRACTION);
+		        event.consume();
+		    }
+		});
+		
+		multiply.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    		addOperation(OperationType.MULTIPLICATION);
+		        event.consume();
+		    }
+		});
+		
+		divide.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    		addOperation(OperationType.DIVISION);
+		        event.consume();
+		    }
+		});
+		
+		equal.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    		displayArea.setText(String.valueOf(calculate()));
+		        event.consume();
+		    }
+		});
+		
+		inverse.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    		displayArea.setText(String.valueOf(inverse(parseDisplay())));
+		        event.consume();
+		    }
+		});
+		
+		sqrt.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    		displayArea.setText(String.valueOf(sqrt(parseDisplay())));
+		        event.consume();
+		    }
+		});
+		
+		buttonList = new ArrayList<Button>();
+
+		buttonList.add(clearExpression);
+		buttonList.add(inverse);
+		buttonList.add(sqrt);
+		buttonList.add(divide);
+		buttonList.add(seven);
+		buttonList.add(eight);
+		buttonList.add(nine);
+		buttonList.add(plus);
+		buttonList.add(four);
+		buttonList.add(five);
+		buttonList.add(six);
+		buttonList.add(multiply);
+		buttonList.add(one);
+		buttonList.add(two);
+		buttonList.add(three);
+		buttonList.add(minus);
+		buttonList.add(zero);
+		buttonList.add(dot);
+		buttonList.add(clear);
+		buttonList.add(equal);
 	}
 
 	public static void main(String[] args) {
