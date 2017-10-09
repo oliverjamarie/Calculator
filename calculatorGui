@@ -12,21 +12,15 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 
-enum OperationType {
-	ADDITION,
-	SUBTRACTION,
-	MULTIPLICATION,
-	DIVISION,
-	NONE
-}
+
 
 public class CalculatorGUI extends Application {
 
 	private TextArea displayArea;
 	private ArrayList<Button> buttonList;
-	private OperationType currentOp;
-	private double firstNumber;
-	private double secondNumber;
+	
+	private Calculator calc = new Calculator ();
+
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -37,7 +31,7 @@ public class CalculatorGUI extends Application {
 		int paneBorderBottom = 20, paneBorderLeft = 20;
 
 		initializeButtons();
-		
+
 		for (Button b : buttonList) {
 			b.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
 			b.setPrefSize(50, 50);
@@ -70,58 +64,45 @@ public class CalculatorGUI extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		primaryStage.setResizable(false);
-		
-		currentOp = OperationType.NONE;
-		firstNumber = 0;
-		secondNumber = 0;
+
+		//currentOp = OperationType.NONE;
 	}
-	
+
 	public double calculate() {
-		secondNumber = parseDisplay();
-		
-		switch(currentOp) {
-		case ADDITION:
-			return firstNumber + secondNumber;
-		case SUBTRACTION:
-			return firstNumber - secondNumber;
-		case MULTIPLICATION:
-			return firstNumber * secondNumber;
-		case DIVISION:
-			return firstNumber / secondNumber;
-		default: 
-			return 0;
-		}
+		calc.setNum(parseDisplay());
+		calc.calculate();
+		return calc.getResult();
 	}
-	
+
 	public void addOperation(OperationType o) {
-		currentOp = o;
-		firstNumber = parseDisplay();
+		double num = parseDisplay();
+		calc.setNum(num);
+		calc.setOperation(o);
 		displayArea.setText("");
 	}
-	
-	public void clear() {
-		displayArea.setText("");
-		firstNumber = 0;
-		secondNumber = 0;
-		currentOp = OperationType.NONE;
-	}
-	
+
 	public void clearExpression() {
 		displayArea.setText("");
+		calc.clearEverything();
 	}
 	
+	public void clear () {
+		displayArea.setText("");
+		calc.clear();
+	}
+
 	public double inverse(double d) {
 		return 1 / d;
 	}
-	
+
 	public double sqrt(double d) {
 		return Math.sqrt(d);
 	}
-	
+
 	public double parseDisplay() {
 		return Double.parseDouble(displayArea.getText());
 	}
-	
+
 	public void initializeButtons() {
 		Button zero = new Button("0");
 		Button one = new Button("1");
@@ -144,169 +125,172 @@ public class CalculatorGUI extends Application {
 		Button clearExpression = new Button("CE");
 		Button sqrt = new Button("√");
 		Button inverse = new Button("1/x");
-		
+
 		zero.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    		displayArea.setText(displayArea.getText() + "0");
-		        event.consume();
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				displayArea.setText(displayArea.getText() + "0");
+				event.consume();
+			}
 		});
-		
+
 		one.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    		displayArea.setText(displayArea.getText() + "1");
-		        event.consume();
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				displayArea.setText(displayArea.getText() + "1");
+				event.consume();
+			}
 		});
-		
+
 		two.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    		displayArea.setText(displayArea.getText() + "2");
-		        event.consume();
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				displayArea.setText(displayArea.getText() + "2");
+				calc.setNum(2);
+				event.consume();
+			}
 		});
-		
+
 		three.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    		displayArea.setText(displayArea.getText() + "3");
-		        event.consume();
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				displayArea.setText(displayArea.getText() + "3");
+				calc.setNum(3);
+				event.consume();
+			}
 		});
-		
+
 		four.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    		displayArea.setText(displayArea.getText() + "4");
-		        event.consume();
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				displayArea.setText(displayArea.getText() + "4");
+				event.consume();
+			}
 		});
-		
+
 		five.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    		displayArea.setText(displayArea.getText() + "5");
-		        event.consume();
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				displayArea.setText(displayArea.getText() + "5");
+				event.consume();
+			}
 		});
-		
+
 		six.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    		displayArea.setText(displayArea.getText() + "6");
-		        event.consume();
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				displayArea.setText(displayArea.getText() + "6");
+				event.consume();
+			}
 		});
-		
+
 		seven.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    		displayArea.setText(displayArea.getText() + "7");
-		        event.consume();
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				displayArea.setText(displayArea.getText() + "7");
+				event.consume();
+			}
 		});
-		
+
 		eight.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    		displayArea.setText(displayArea.getText() + "8");
-		        event.consume();
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				displayArea.setText(displayArea.getText() + "8");
+				event.consume();
+			}
 		});
-		
+
 		nine.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    		displayArea.setText(displayArea.getText() + "9");
-		        event.consume();
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				displayArea.setText(displayArea.getText() + "9");
+				event.consume();
+			}
 		});
-		
+
 		dot.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    		if (!displayArea.getText().contains(".")) {
-		    			displayArea.setText(displayArea.getText() + ".");
-		    		}
-		        event.consume();
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				if (!displayArea.getText().contains(".")) {
+					displayArea.setText(displayArea.getText() + ".");
+				}
+				event.consume();
+			}
 		});
-		
+
 		clear.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    		clear();
-		        event.consume();
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				clear();
+				event.consume();
+			}
 		});
-		
+
 		clearExpression.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    		clearExpression();
-		        event.consume();
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				clearExpression();
+				event.consume();
+			}
 		});
-		
+
 		plus.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    		addOperation(OperationType.ADDITION);
-		        event.consume();
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				addOperation(OperationType.ADDITION);
+				event.consume();
+			}
 		});
-		
+
 		minus.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    		addOperation(OperationType.SUBTRACTION);
-		        event.consume();
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				addOperation(OperationType.SUBTRACTION);
+				event.consume();
+			}
 		});
-		
+
 		multiply.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    		addOperation(OperationType.MULTIPLICATION);
-		        event.consume();
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				addOperation(OperationType.MULTIPLICATION);
+				event.consume();
+			}
 		});
-		
+
 		divide.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    		addOperation(OperationType.DIVISION);
-		        event.consume();
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				addOperation(OperationType.DIVISION);
+				event.consume();
+			}
 		});
-		
+
 		equal.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    		displayArea.setText(String.valueOf(calculate()));
-		        event.consume();
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				String msg = String.valueOf(calculate());
+				displayArea.setText(msg);
+				event.consume();
+			}
 		});
-		
+
 		inverse.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    		displayArea.setText(String.valueOf(inverse(parseDisplay())));
-		        event.consume();
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				displayArea.setText(String.valueOf(inverse(parseDisplay())));
+				event.consume();
+			}
 		});
-		
+
 		sqrt.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    		displayArea.setText(String.valueOf(sqrt(parseDisplay())));
-		        event.consume();
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				displayArea.setText(String.valueOf(sqrt(parseDisplay())));
+				event.consume();
+			}
 		});
-		
+
 		buttonList = new ArrayList<Button>();
 
 		buttonList.add(clearExpression);
